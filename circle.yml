@@ -99,14 +99,13 @@ dependencies:
 
     - if [ "$COVERITY_BUILD_""x" != "0x" ]; then mkdir ~/cov_scan/ && wget https://scan.coverity.com/download/linux-64 --post-data "token=$COVERITY_TOKEN&project=$COV_PROJ" -O ~/cov_scan/coverity_tool.tgz && wget 'http://www.catb.org/~esr/coverity-submit/coverity-submit-1.17.tar.gz' -O ~/cov_scan/coverity-submit.tar.gz && cd ~/cov_scan/ && tar -xzvf coverity_tool.tgz ; fi
 
-# Download sbt launcher.
+#   Download sbt launcher.
     - wget http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.8/sbt-launch.jar
-# Tidy up joda-convert jar
+#   Tidy up joda-convert jar
     - zip -d ~/.ivy2/cache/org.joda/joda-convert/jars/joda-convert-1.2.jar META-INF/LICENSE.txt || true
     - zip -d ~/.ivy2/cache/org.joda/joda-convert/jars/joda-convert-1.2.jar META-INF/NOTICE.txt  || true
     - pwd ; ls -al
     - java $SBT_OPTS -jar sbt-launch.jar -batch android:package
-
 #    - ./gradlew lint --info
 #    - ./gradlew assembleDebug --stacktrace --info --no-daemon
 
@@ -120,7 +119,7 @@ dependencies:
 
 # --- copy apk file to generic location ---
     - mkdir -p ./app/build/outputs/apk/
-    - if [ ! -e ./app/build/outputs/apk/app-debug-unaligned.apk ]; then cp -v `find ./build/outputs/apk/ -name '*.apk' 2> /dev/null | tail -1 2> /dev/null` ./app/build/outputs/apk/app-debug-unaligned.apk ; fi
+    - cp -v ./target/android/output/toktok-debug-unaligned.apk ./app/build/outputs/apk/app-debug-unaligned.apk
 # --- copy apk file to generic location ---
 
     - zip -d app/build/outputs/apk/app-debug-unaligned.apk META-INF/\*     # remove signature !!

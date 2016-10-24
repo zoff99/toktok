@@ -5,18 +5,18 @@ machine:
     version: oraclejdk8
   environment:
 ###### custom 1 ######
-    ZEMU_: "appemu23"
-    EMU_: "appemu21"
+    EMU_: "appemu23"
+    YEMU_: "appemu21"
     XEMU_: "appemu10"
-    Zsdpath: "/sdcard"
-    sdpath: "/storage/sdcard"
+    sdpath: "/sdcard"
+    Ysdpath: "/storage/sdcard"
     Xsdpath: "/mnt/sdcard"
 ###### custom 1 ######
 
 ###### custom 2 ######
     XGRADLE_HOME: ~/g/gradle-3.1
     XPATH: ~/g/gradle-3.1/bin:$PATH
-    GRADLE_CUSTOM_VERSION: N
+    GRADLE_CUSTOM_VERSION: Y
 ###### custom 2 ######
 
 ###### custom 3 ######
@@ -54,6 +54,8 @@ dependencies:
     - sudo apt-get install qrencode > /dev/null 2> /dev/null
     - sudo apt-get install zip > /dev/null 2> /dev/null
     - sudo apt-get install bc > /dev/null 2> /dev/null
+    - sudo apt-get install groovy ; exit 0
+    - sudo apt-get install scala ; exit 0
 
     - gradle -v # display gradle version
     - if [ "$GRADLE_CUSTOM_VERSION""x" == "1x" ]; then cd ~ ; wget https://services.gradle.org/distributions/gradle-3.1-bin.zip ; fi
@@ -69,6 +71,9 @@ dependencies:
     - echo y | android update sdk --no-ui --all --filter build-tools-23.0.2 > /dev/null 2> /dev/null
     - echo y | android update sdk --no-ui --all --filter build-tools-23.0.3 > /dev/null 2> /dev/null
     - echo y | android update sdk --no-ui --all --filter build-tools-24.0.0 > /dev/null 2> /dev/null
+    - echo y | android update sdk --no-ui --all --filter build-tools-24.0.1 > /dev/null 2> /dev/null
+    - echo y | android update sdk --no-ui --all --filter build-tools-24.0.2 > /dev/null 2> /dev/null
+    - echo y | android update sdk --no-ui --all --filter build-tools-24.0.3 > /dev/null 2> /dev/null
     - echo y | android update sdk --no-ui --all --filter android-21 > /dev/null 2> /dev/null
     - echo y | android update sdk --no-ui --all --filter android-22 > /dev/null 2> /dev/null
     - echo y | android update sdk --no-ui --all --filter android-23 > /dev/null 2> /dev/null

@@ -150,6 +150,9 @@ dependencies:
 ##   qr code to go directly to the aritfacts (to scan with phone)
     - qrencode -o $CIRCLE_ARTIFACTS/QR_artifacts.png 'https://circleci.com/gh/'${CIRCLE_PROJECT_USERNAME}'/'${CIRCLE_PROJECT_REPONAME}'/'${CIRCLE_BUILD_NUM}'#artifacts' ; exit 0
 
+    - find ~/.ivy2 -type f -name "ivydata-*.properties" -delete ; exit 0
+    - find ~/.sbt/boot -name "sbt.*.lock" -delete ; exit 0
+
 test:
   pre:
     - mksdcard -l e 180M sdcard.img
@@ -179,7 +182,7 @@ test:
     - sleep 10
     - import -window root $CIRCLE_ARTIFACTS/capture_emulator_running.png
 
-    - fb-adb shell "cat /proc/meminfo" ; exit 0
+    - adb shell "cat /proc/meminfo" ; exit 0
 
     - adb shell ls -al / ; exit 0
     - adb shell ls -al /storage/ ; exit 0
@@ -191,7 +194,7 @@ test:
         background: true
     - sleep 60 # let the emulator settle down first
 
-    - fb-adb shell am start -n $CLASS_P/$START_INTENT_P
+    - adb shell am start -n $CLASS_P/$START_INTENT_P
     - sleep 60
     - sleep 120 # wait to be sure the app has started fully
 
@@ -199,8 +202,5 @@ test:
 
     - import -window root $CIRCLE_ARTIFACTS/capture_app_running.png # get proof that the app is running
     - adb shell screencap -p | sed 's/\r$//' > $CIRCLE_ARTIFACTS/capture_app_running_2.png
-
-    - find ~/.ivy2 -type f -name "ivydata-*.properties" -delete
-    - find ~/.sbt/boot -name "sbt.*.lock" -delete
 
 

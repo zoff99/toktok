@@ -17,6 +17,7 @@ machine:
     XGRADLE_HOME: ~/g/gradle-3.1
     XPATH: ~/g/gradle-3.1/bin:$PATH
     GRADLE_CUSTOM_VERSION: Y
+    SBT_OPTS: "-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
 ###### custom 2 ######
 
 ###### custom 3 ######
@@ -42,6 +43,9 @@ dependencies:
   cache_directories:
     - ~/.android
     - ~/.gradle
+    - ~/.ivy2
+    - ~/.m2
+    - ~/.sbt
   override:
     - echo "dummy"
   pre:
@@ -95,10 +99,16 @@ dependencies:
 
     - if [ "$COVERITY_BUILD_""x" != "0x" ]; then mkdir ~/cov_scan/ && wget https://scan.coverity.com/download/linux-64 --post-data "token=$COVERITY_TOKEN&project=$COV_PROJ" -O ~/cov_scan/coverity_tool.tgz && wget 'http://www.catb.org/~esr/coverity-submit/coverity-submit-1.17.tar.gz' -O ~/cov_scan/coverity-submit.tar.gz && cd ~/cov_scan/ && tar -xzvf coverity_tool.tgz ; fi
 
+# Download sbt launcher.
+    - wget http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.8/sbt-launch.jar
+# Tidy up joda-convert jar
+    - zip -d ~/.ivy2/cache/org.joda/joda-convert/jars/joda-convert-1.2.jar META-INF/LICENSE.txt || true
+    - zip -d ~/.ivy2/cache/org.joda/joda-convert/jars/joda-convert-1.2.jar META-INF/NOTICE.txt  || true
     - pwd ; ls -al
+    - java $SBT_OPTS -jar sbt-launch.jar -batch android:package
 
-    - ./gradlew lint --info
-    - ./gradlew assembleDebug --stacktrace --info --no-daemon
+#    - ./gradlew lint --info
+#    - ./gradlew assembleDebug --stacktrace --info --no-daemon
 
     - ls -al build/outputs/apk/ ; exit 0
     - find . -name '*.apk' ; exit 0
@@ -188,4 +198,8 @@ test:
 
     - import -window root $CIRCLE_ARTIFACTS/capture_app_running.png # get proof that the app is running
     - adb shell screencap -p | sed 's/\r$//' > $CIRCLE_ARTIFACTS/capture_app_running_2.png
+
+    - find ~/.ivy2 -type f -name "ivydata-*.properties" -delete
+    - find ~/.sbt/boot -name "sbt.*.lock" -delete
+
 

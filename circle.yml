@@ -35,6 +35,7 @@ machine:
     COV_PROJ: xxx
 ###############################
 
+
     ANDROID_HOME: /usr/local/android-sdk-linux
     ANDROID_SDK: /usr/local/android-sdk-linux/
     _SDK_: /usr/local/android-sdk-linux/
